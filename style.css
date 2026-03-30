@@ -615,6 +615,64 @@
     }
 
     /* ── Print ── */
+    /* Splash / Login */
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 20000;
+      background: linear-gradient(to bottom, #0b0b2b, #1b2735 70%, #090a0f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.5s ease;
+    }
+    .splash.hidden { opacity: 0; pointer-events: none; }
+    .splash-content { text-align: center; }
+    .splash-host {
+      color: var(--cyan);
+      font-family: var(--font);
+      font-size: 14px;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+      opacity: 0.6;
+    }
+    .splash-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(199,146,234,0.15);
+      border: 2px solid var(--purple);
+      color: var(--purple);
+      font-family: var(--font);
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .splash-name {
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .splash-btn {
+      background: rgba(99,212,245,0.1);
+      border: 1px solid rgba(99,212,245,0.3);
+      color: var(--cyan);
+      font-family: var(--font);
+      font-size: 14px;
+      padding: 8px 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .splash-btn:hover {
+      background: rgba(99,212,245,0.2);
+      border-color: rgba(99,212,245,0.5);
+    }
+
     /* Toast */
     .toast {
       position: fixed;

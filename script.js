@@ -51,6 +51,20 @@ function playPop() {
   o.start(); o.stop(ctx.currentTime + 0.1);
 }
 
+function playChime() {
+  var ctx = getAudio();
+  [523, 659, 784].forEach(function(freq, i) {
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0, ctx.currentTime + i * 0.15);
+    g.gain.linearRampToValueAtTime(0.08, ctx.currentTime + i * 0.15 + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.6);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(ctx.currentTime + i * 0.15);
+    o.stop(ctx.currentTime + i * 0.15 + 0.6);
+  });
+}
+
 function animateCursorAlongCurve(cursor, points, duration, cb) {
   var start = performance.now();
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -573,7 +587,17 @@ document.querySelectorAll('#mailFrom, #mailSubject, #mailBody').forEach(el => {
   setInterval(update, 1000);
 })();
 
-(function autoOpen() {
+var splashDismissed = false;
+function dismissSplash() {
+  if (splashDismissed) return;
+  splashDismissed = true;
+  playChime();
+  var splash = document.getElementById('splash');
+  splash.classList.add('hidden');
+  setTimeout(function() { splash.remove(); autoOpen(); }, 500);
+}
+
+function autoOpen() {
   var cursor = document.getElementById('fakeCursor');
   var icon = document.querySelector('#desktop .desktop-icon');
   var rect = icon.getBoundingClientRect();
@@ -605,4 +629,4 @@ document.querySelectorAll('#mailFrom, #mailSubject, #mailBody').forEach(el => {
       });
     });
   });
-})();
+}
