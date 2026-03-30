@@ -49,11 +49,11 @@
   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
   Source Code
 </a>
-<a class="desktop-icon" href="https://linkedin.com/in/shailrshah" target="_blank" onclick="playPop()">
+<a class="desktop-icon" id="iconLinkedIn" href="https://linkedin.com/in/shailrshah" target="_blank" onclick="playPop()">
   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
   LinkedIn
 </a>
-<a class="desktop-icon" href="https://drive.google.com/drive/folders/1AnLnvZxAPF6TZB6vWRXUbJJY7zIvl_e3?usp=drive_link" target="_blank" onclick="playPop()">
+<a class="desktop-icon" id="iconResumePDF" href="https://drive.google.com/drive/folders/1AnLnvZxAPF6TZB6vWRXUbJJY7zIvl_e3?usp=drive_link" target="_blank" onclick="playPop()">
   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
   Resume PDF
 </a>
@@ -80,6 +80,14 @@
   <!-- Terminal -->
   <div class="terminal" id="terminal">
 
+    <!-- DOWNLOAD PDF (top) -->
+    <div class="cmd-group" id="cmd-pdf-top">
+      <div class="prompt-line">
+        <span class="p-user">guest</span><span class="p-at">@</span><span class="p-host">shail.dev</span><span class="p-sep">:</span><span class="p-dir">~/resume</span><span class="p-git">mainline</span><span class="p-sym">❯</span>
+        <span class="p-cmd"><a href="#" onclick="event.preventDefault();animateToDesktopIcon('iconResumePDF',event.clientX,event.clientY);" style="color:var(--cyan);text-decoration:none;cursor:pointer;">📄 Download as PDF</a></span>
+      </div>
+    </div>
+
     <!-- WHOAMI -->
     <div class="cmd-group" id="cmd-0">
       <div class="prompt-line">
@@ -92,7 +100,7 @@
           <span class="c-key">loc</span><span class="c-val">Sunnyvale, CA</span>
           <span class="c-key">tel</span><span class="c-val">+1 (669) 224-8809</span>
           <span class="c-key">eml</span><span class="c-val"><a href="#" onclick="event.preventDefault();animateToContact(event.clientX,event.clientY);" style="color:var(--cyan);text-decoration:none;cursor:pointer;">acad.shail@gmail.com</a></span>
-          <span class="c-key">web</span><span class="c-val"><a href="https://linkedin.com/in/shailrshah" target="_blank">linkedin.com/in/shailrshah</a></span>
+          <span class="c-key">web</span><span class="c-val"><a href="#" onclick="event.preventDefault();animateToDesktopIcon('iconLinkedIn',event.clientX,event.clientY);" style="color:var(--cyan);text-decoration:none;cursor:pointer;">linkedin.com/in/shailrshah</a></span>
         </div>
       </div>
     </div>
@@ -275,6 +283,14 @@
           <span class="cert-name">AWS Certified Generative AI Developer – Pro</span>
           <span class="cert-status">[IN_PROGRESS]</span>
         </div>
+      </div>
+    </div>
+
+    <!-- DOWNLOAD PDF -->
+    <div class="cmd-group" id="cmd-pdf">
+      <div class="prompt-line">
+        <span class="p-user">guest</span><span class="p-at">@</span><span class="p-host">shail.dev</span><span class="p-sep">:</span><span class="p-dir">~/resume</span><span class="p-git">mainline</span><span class="p-sym">❯</span>
+        <span class="p-cmd"><a href="#" onclick="event.preventDefault();animateToDesktopIcon('iconResumePDF',event.clientX,event.clientY);" style="color:var(--cyan);text-decoration:none;cursor:pointer;">📄 Download as PDF</a></span>
       </div>
     </div>
 

@@ -197,6 +197,44 @@ function animateToContact(startX, startY) {
 
 var wasMinimized = false;
 
+function animateToDesktopIcon(iconId, startX, startY) {
+  var cursor = document.getElementById('fakeCursor');
+  var yellowDot = document.querySelector('#window .dot-yellow');
+  var r1 = yellowDot.getBoundingClientRect();
+
+  cursor.style.transition = 'none';
+  cursor.style.left = (startX || window.innerWidth / 2) + 'px';
+  cursor.style.top = (startY || window.innerHeight / 2) + 'px';
+  cursor.classList.add('visible');
+
+  setTimeout(function() {
+    cursor.style.transition = 'left 0.6s ease, top 0.6s ease';
+    cursor.style.left = (r1.left + r1.width / 2) + 'px';
+    cursor.style.top = (r1.top + r1.height / 2) + 'px';
+  }, 100);
+
+  setTimeout(function() { yellowDot.parentElement.classList.add('hover-fake'); }, 500);
+
+  setTimeout(function() {
+    yellowDot.parentElement.classList.remove('hover-fake');
+    minimizeWindow();
+  }, 800);
+
+  setTimeout(function() {
+    var icon = document.getElementById(iconId);
+    var r2 = icon.getBoundingClientRect();
+    cursor.style.left = (r2.left + r2.width / 2) + 'px';
+    cursor.style.top = (r2.top + r2.height / 2) + 'px';
+  }, 1100);
+
+  setTimeout(function() {
+    cursor.classList.remove('visible');
+    var icon = document.getElementById(iconId);
+    playPop();
+    window.open(icon.href, '_blank');
+  }, 1800);
+}
+
 function closeWindow() {
   playClick();
   wasMinimized = false;
