@@ -492,8 +492,12 @@
       flex-shrink: 0;
     }
 
-    #termInput {
+    .input-wrap {
+      position: relative;
       flex: 1;
+    }
+    #termInput {
+      width: 100%;
       background: transparent;
       border: none;
       outline: none;
@@ -502,6 +506,19 @@
       font-size: 13.5px;
       padding: 0 8px;
       caret-color: var(--cyan);
+      position: relative;
+      z-index: 1;
+    }
+    .ghost-text {
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding: 0 8px;
+      font-family: var(--font);
+      font-size: 13.5px;
+      color: var(--muted);
+      pointer-events: none;
+      white-space: pre;
     }
 
     .run-btn {

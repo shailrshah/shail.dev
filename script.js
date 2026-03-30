@@ -641,8 +641,26 @@ function escapeHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-document.getElementById('termInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') runCommand();
+var termInput = document.getElementById('termInput');
+var ghostText = document.getElementById('ghostText');
+var cmdList = Object.keys(responses);
+
+termInput.addEventListener('input', function() {
+  var val = this.value.toLowerCase();
+  if (!val) { ghostText.textContent = ''; return; }
+  var match = cmdList.find(c => c.startsWith(val));
+  ghostText.textContent = match || '';
+});
+
+termInput.addEventListener('keydown', e => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    if (ghostText.textContent) {
+      e.target.value = ghostText.textContent;
+      ghostText.textContent = '';
+    }
+  }
+  else if (e.key === 'Enter') { ghostText.textContent = ''; runCommand(); }
   else if (e.key.length === 1) playKeystroke();
 });
 document.querySelectorAll('#mailFrom, #mailSubject, #mailBody').forEach(el => {

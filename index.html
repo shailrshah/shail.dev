@@ -299,7 +299,10 @@
       <p class="input-hint">// try a command — <strong>help</strong> to see what's available</p>
       <div class="input-row">
         <span class="input-prompt-static">guest@shail.dev:~/resume (mainline) ❯&nbsp;</span>
-        <input type="text" id="termInput" placeholder="type a command..." autocomplete="off" spellcheck="false" />
+        <span class="input-wrap">
+          <input type="text" id="termInput" placeholder="type a command..." autocomplete="off" spellcheck="false" />
+          <span class="ghost-text" id="ghostText"></span>
+        </span>
         <button class="run-btn" onclick="runCommand()">↵ run</button>
       </div>
       <div class="suggestions">
