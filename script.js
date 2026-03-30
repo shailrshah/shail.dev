@@ -140,6 +140,7 @@ function sendMail() {
   if (!from.value) { from.classList.add('error'); hasError = true; }
   if (!body.value) { body.classList.add('error'); hasError = true; }
   if (hasError) { playError(); status.style.color = 'var(--coral)'; status.textContent = '✗ Please fill in highlighted fields'; return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(from.value)) { from.classList.add('error'); playError(); status.style.color = 'var(--coral)'; status.textContent = '✗ Please enter a valid email address'; return; }
   status.style.color = 'var(--yellow)'; status.textContent = '⏳ Sending...';
   fetch('https://formspree.io/f/xgopkvzk', {
     method: 'POST',
