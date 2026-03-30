@@ -1,3 +1,56 @@
+var audioCtx;
+function getAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
+
+function playClick() {
+  var ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sine'; o.frequency.value = 1200;
+  g.gain.setValueAtTime(0.08, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(); o.stop(ctx.currentTime + 0.06);
+}
+
+function playKeystroke() {
+  var ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'square'; o.frequency.value = 800 + Math.random() * 400;
+  g.gain.setValueAtTime(0.03, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(); o.stop(ctx.currentTime + 0.03);
+}
+
+function playWhoosh() {
+  var ctx = getAudio(), buf = ctx.createBufferSource(), g = ctx.createGain();
+  var b = ctx.createBuffer(1, ctx.sampleRate * 0.3, ctx.sampleRate);
+  var d = b.getChannelData(0);
+  for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+  buf.buffer = b;
+  var f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 2000; f.Q.value = 0.5;
+  g.gain.setValueAtTime(0.1, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+  buf.connect(f); f.connect(g); g.connect(ctx.destination);
+  buf.start(); buf.stop(ctx.currentTime + 0.3);
+}
+
+function playError() {
+  var ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'square'; o.frequency.value = 200;
+  g.gain.setValueAtTime(0.08, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(); o.stop(ctx.currentTime + 0.15);
+}
+
+function playPop() {
+  var ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sine'; o.frequency.value = 600;
+  o.frequency.exponentialRampToValueAtTime(1400, ctx.currentTime + 0.08);
+  g.gain.setValueAtTime(0.07, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(); o.stop(ctx.currentTime + 0.1);
+}
+
 function animateCursorAlongCurve(cursor, points, duration, cb) {
   var start = performance.now();
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -21,15 +74,18 @@ function animateCursorAlongCurve(cursor, points, duration, cb) {
 }
 
 function openMail() {
+  playClick();
   document.getElementById('desktop').classList.remove('visible');
   document.getElementById('mailWindow').classList.remove('hidden');
 }
 function closeMail() {
+  playClick();
   document.getElementById('mailWindow').classList.add('hidden');
   document.getElementById('desktop').classList.add('visible');
   document.getElementById('mailDockDot').classList.remove('active');
 }
 function minimizeMail() {
+  playClick();
   document.getElementById('mailWindow').classList.add('hidden');
   document.getElementById('desktop').classList.add('visible');
   document.getElementById('mailDockDot').classList.add('active');
@@ -43,7 +99,7 @@ function sendMail() {
   var hasError = false;
   if (!from.value) { from.classList.add('error'); hasError = true; }
   if (!body.value) { body.classList.add('error'); hasError = true; }
-  if (hasError) { status.style.color = 'var(--coral)'; status.textContent = '✗ Please fill in highlighted fields'; return; }
+  if (hasError) { playError(); status.style.color = 'var(--coral)'; status.textContent = '✗ Please fill in highlighted fields'; return; }
   status.style.color = 'var(--yellow)'; status.textContent = '⏳ Sending...';
   fetch('https://formspree.io/f/xgopkvzk', {
     method: 'POST',
@@ -53,6 +109,7 @@ function sendMail() {
     if (r.ok) {
       from.value = ''; subject.value = ''; body.value = ''; status.textContent = '';
       closeMail();
+      playWhoosh();
       var toast = document.getElementById('toast');
       toast.classList.add('visible');
       setTimeout(function() { toast.classList.remove('visible'); }, 3000);
@@ -100,18 +157,21 @@ function animateToContact(startX, startY) {
 var wasMinimized = false;
 
 function closeWindow() {
+  playClick();
   wasMinimized = false;
   document.getElementById('window').classList.add('hidden');
   document.getElementById('desktop').classList.add('visible');
   document.getElementById('dockDot').classList.remove('active');
 }
 function minimizeWindow() {
+  playClick();
   wasMinimized = true;
   document.getElementById('window').classList.add('hidden');
   document.getElementById('desktop').classList.add('visible');
   document.getElementById('dockDot').classList.add('active');
 }
 function openWindow() {
+  playClick();
   document.getElementById('desktop').classList.remove('visible');
   document.getElementById('window').classList.remove('hidden');
   if (!wasMinimized) {
@@ -483,6 +543,7 @@ function runCommand() {
     content = result;
   } else {
     content = `<div class="cmd-group"><div class="error-line">bash: <span>${escapeHtml(raw)}</span>: command not found &nbsp; // try <span style="color:var(--cyan)">help</span></div></div>`;
+    playError();
   }
 
   renderHTML(promptHTML + content, responseArea, inputSection);
@@ -496,6 +557,7 @@ function escapeHtml(s) {
 
 document.getElementById('termInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') runCommand();
+  else if (e.key.length === 1) playKeystroke();
 });
 
 (function tickClock() {
@@ -534,6 +596,7 @@ document.getElementById('termInput').addEventListener('keydown', e => {
           cursor.classList.remove('visible');
           icon.style.transform = '';
           icon.style.color = '';
+          playClick();
           openWindow();
         }, 300);
       });
