@@ -122,6 +122,11 @@
     }
     .desktop.visible { display: flex; }
     .dock {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 16px;
@@ -131,6 +136,7 @@
       display: flex;
       gap: 16px;
     }
+    .dock.hidden { display: none; }
     .desktop-icon {
       text-align: center;
       cursor: pointer;
@@ -141,6 +147,7 @@
     }
     .desktop-icon:hover { color: var(--cyan); transform: translateY(-4px); }
     .desktop-icon svg { display: block; margin: 0 auto 4px; }
+    .dock .desktop-icon { color: var(--text); }
     .dock-indicator {
       width: 4px; height: 4px;
       border-radius: 50%;
@@ -164,6 +171,7 @@
       gap: 20px;
     }
     .desktop-icons-fixed a { text-decoration: none; color: inherit; }
+    .desktop-icons-fixed.app-open { display: none; }
     .window.fullscreen { max-width: 100%; margin: 0; border-radius: 0; border: none; }
 
     /* Mail */
@@ -435,6 +443,13 @@
       0%,100% { box-shadow: 0 0 6px var(--yellow); }
       50%      { box-shadow: 0 0 14px var(--yellow), 0 0 24px rgba(255,203,107,0.3); }
     }
+    @keyframes shake {
+      0%,100% { transform: translate(-50%,-50%); }
+      20% { transform: translate(calc(-50% - 6px),-50%); }
+      40% { transform: translate(calc(-50% + 6px),-50%); }
+      60% { transform: translate(calc(-50% - 4px),-50%); }
+      80% { transform: translate(calc(-50% + 4px),-50%); }
+    }
     .cert-name   { color: var(--text); }
     .cert-status { color: var(--yellow); font-size: 12px; margin-left: auto; }
 
@@ -584,7 +599,19 @@
     @media (max-width: 640px) {
       body { font-size: 12px; }
       .menubar { display: none; }
-      .desktop-icons-fixed { display: none; }
+      .desktop-icons-fixed {
+        position: fixed;
+        top: 40px;
+        left: 20px;
+        right: auto;
+        bottom: auto;
+        transform: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 24px;
+        width: calc(100% - 40px);
+        justify-content: flex-start;
+      }
       .window { margin: 0; border-radius: 0; border-left: none; border-right: none; max-height: 100vh; }
       #window .titlebar { padding-top: max(44px, env(safe-area-inset-top, 44px)); }
       .terminal { padding: 14px 14px 20px; }

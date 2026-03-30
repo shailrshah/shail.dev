@@ -87,21 +87,47 @@ function animateCursorAlongCurve(cursor, points, duration, cb) {
   requestAnimationFrame(step);
 }
 
+function setIconsHidden(hidden) {
+  document.querySelector('.desktop-icons-fixed').classList.toggle('app-open', hidden);
+}
+
+function isMailOpen() {
+  return !document.getElementById('mailWindow').classList.contains('hidden');
+}
+
+function dockResumeClick() {
+  if (isMailOpen()) {
+    minimizeMail();
+  }
+  openWindow();
+}
+
+function dockMailClick() {
+  if (isMailOpen()) {
+    playError();
+    var mw = document.getElementById('mailWindow');
+    mw.style.animation = 'none';
+    mw.offsetHeight;
+    mw.style.animation = 'shake 0.4s ease';
+    mw.addEventListener('animationend', function() { mw.style.animation = ''; }, { once: true });
+    return;
+  }
+  openMail();
+}
+
 function openMail() {
   playClick();
-  document.getElementById('desktop').classList.remove('visible');
   document.getElementById('mailWindow').classList.remove('hidden');
+  document.getElementById('mailDockDot').classList.add('active');
 }
 function closeMail() {
   playClick();
   document.getElementById('mailWindow').classList.add('hidden');
-  document.getElementById('desktop').classList.add('visible');
   document.getElementById('mailDockDot').classList.remove('active');
 }
 function minimizeMail() {
   playClick();
   document.getElementById('mailWindow').classList.add('hidden');
-  document.getElementById('desktop').classList.add('visible');
   document.getElementById('mailDockDot').classList.add('active');
 }
 function sendMail() {
@@ -176,6 +202,8 @@ function closeWindow() {
   document.getElementById('window').classList.add('hidden');
   document.getElementById('desktop').classList.add('visible');
   document.getElementById('dockDot').classList.remove('active');
+  document.getElementById('dock').classList.remove('hidden');
+  setIconsHidden(false);
 }
 function minimizeWindow() {
   playClick();
@@ -183,11 +211,15 @@ function minimizeWindow() {
   document.getElementById('window').classList.add('hidden');
   document.getElementById('desktop').classList.add('visible');
   document.getElementById('dockDot').classList.add('active');
+  document.getElementById('dock').classList.remove('hidden');
+  setIconsHidden(false);
 }
 function openWindow() {
   playClick();
   document.getElementById('desktop').classList.remove('visible');
   document.getElementById('window').classList.remove('hidden');
+  document.getElementById('dock').classList.add('hidden');
+  setIconsHidden(true);
   if (!wasMinimized) {
     var groups = document.querySelectorAll('.cmd-group[id^="cmd-"]');
     groups.forEach(function(g) { g.classList.remove('visible'); });
