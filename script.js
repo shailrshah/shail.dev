@@ -201,6 +201,8 @@ function animateToDesktopIcon(iconId, startX, startY) {
   var cursor = document.getElementById('fakeCursor');
   var yellowDot = document.querySelector('#window .dot-yellow');
   var r1 = yellowDot.getBoundingClientRect();
+  var href = document.getElementById(iconId).href;
+  var newWin = window.open('', '_blank');
 
   cursor.style.transition = 'none';
   cursor.style.left = (startX || window.innerWidth / 2) + 'px';
@@ -229,9 +231,8 @@ function animateToDesktopIcon(iconId, startX, startY) {
 
   setTimeout(function() {
     cursor.classList.remove('visible');
-    var icon = document.getElementById(iconId);
     playPop();
-    window.open(icon.href, '_blank');
+    newWin.location = href;
   }, 1800);
 }
 
