@@ -615,6 +615,29 @@
     }
 
     /* ── Print ── */
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: rgba(19, 21, 31, 0.95);
+      border: 1px solid var(--green);
+      color: var(--green);
+      font-family: var(--font);
+      font-size: 13px;
+      padding: 10px 24px;
+      border-radius: 8px;
+      z-index: 10001;
+      opacity: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     @media print {
       body { background: #fff; color: #111; }
       .window { box-shadow: none; border: none; margin: 0; }

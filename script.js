@@ -51,8 +51,11 @@ function sendMail() {
     body: JSON.stringify({ email: from.value, subject: subject.value || "Let's chat!", message: body.value })
   }).then(function(r) {
     if (r.ok) {
-      status.style.color = 'var(--green)'; status.textContent = '✓ Message sent!';
-      from.value = ''; subject.value = ''; body.value = '';
+      from.value = ''; subject.value = ''; body.value = ''; status.textContent = '';
+      closeMail();
+      var toast = document.getElementById('toast');
+      toast.classList.add('visible');
+      setTimeout(function() { toast.classList.remove('visible'); }, 3000);
     } else { status.style.color = 'var(--coral)'; status.textContent = '✗ Failed to send. Try again.'; }
   }).catch(function() { status.style.color = 'var(--coral)'; status.textContent = '✗ Network error. Try again.'; });
 }
