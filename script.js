@@ -666,10 +666,11 @@ function dismissSplash() {
   playChime();
   var splash = document.getElementById('splash');
   splash.classList.add('hidden');
-  setTimeout(function() { splash.remove(); autoOpen(); }, 500);
+  setTimeout(function() { splash.remove(); autoOpen(); localStorage.setItem('visited','1'); }, 500);
 }
 
 function autoOpen() {
+  if (localStorage.getItem('visited')) { return; }
   var cursor = document.getElementById('fakeCursor');
   var icon = document.querySelector('#dock .desktop-icon');
   var rect = icon.getBoundingClientRect();
