@@ -456,6 +456,25 @@
       .skills-grid { grid-template-columns: 1fr; }
       .sk-cat::after { content: ':'; }
       .contact-grid { grid-template-columns: auto 1fr; gap: 3px 8px; }
+
+      /* Interactive input area */
+      .input-prompt-static { font-size: 0; }
+      .input-prompt-static::before { content: '❯\00a0'; font-size: 13px; }
+      .input-row { flex-wrap: wrap; gap: 6px; }
+      #termInput { min-width: 0; width: 100%; }
+      .suggestions { gap: 5px; }
+      .sug-btn { font-size: 11px; padding: 5px 8px; }
+
+      /* Command output grids — horizontal scroll */
+      .term-response .output,
+      .term-response .cmd-group {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .term-response pre { white-space: pre; overflow-x: auto; }
+
+      /* Prompt lines */
+      .prompt-line { font-size: 11px; }
     }
 
     /* ── Print ── */
