@@ -177,11 +177,11 @@ function animateToContact(startX, startY) {
   setTimeout(function() { yellowDot.parentElement.classList.add('hover-fake'); }, 500);
 
   // Click yellow dot to minimize
-  setTimeout(function() { yellowDot.parentElement.classList.remove('hover-fake'); minimizeWindow(); }, 800);
+  setTimeout(function() { yellowDot.parentElement.classList.remove('hover-fake'); minimizeWindow(); document.getElementById('dock').classList.remove('hidden'); }, 800);
 
   // Move cursor to contact icon in dock
   setTimeout(function() {
-    var mailIcon = document.querySelectorAll('#desktop .desktop-icon')[1];
+    var mailIcon = document.querySelectorAll('#dock .desktop-icon')[1];
     var r2 = mailIcon.getBoundingClientRect();
     cursor.style.left = (r2.left + r2.width / 2) + 'px';
     cursor.style.top = (r2.top + r2.height / 2) + 'px';
@@ -631,7 +631,7 @@ function dismissSplash() {
 
 function autoOpen() {
   var cursor = document.getElementById('fakeCursor');
-  var icon = document.querySelector('#desktop .desktop-icon');
+  var icon = document.querySelector('#dock .desktop-icon');
   var rect = icon.getBoundingClientRect();
   var tx = rect.left + rect.width / 2;
   var ty = rect.top + rect.height / 2;
