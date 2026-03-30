@@ -10,7 +10,7 @@
   <style>
     :root {
       --bg:          #0d0f17;
-      --bg-panel:    #13151f;
+      --bg-panel:    rgba(19, 21, 31, 0.85);
       --bg-line:     #181a27;
       --border:      #1e2133;
       --text:        #c9d1f0;
@@ -35,19 +35,20 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow: hidden; }
 
     html {
       background: #090A0F;
     }
     body {
-      background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+      background: linear-gradient(to bottom, #0b0b2b, #1b2735 70%, #090a0f);
+      background-attachment: fixed;
       color: var(--text);
       font-family: var(--font);
       font-size: 13.5px;
       line-height: 1.65;
       min-height: 100vh;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     /* ── Scanline overlay ── */
@@ -65,14 +66,24 @@
       pointer-events: none;
       z-index: 9999;
     }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
 
     /* ── Window chrome ── */
     .window {
       max-width: 900px;
+      max-height: calc(100vh - 5rem);
       margin: 2.5rem auto;
       border-radius: 10px;
       border: 1px solid var(--border);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
       box-shadow:
         0 0 0 1px rgba(99,212,245,0.04),
         0 30px 80px rgba(0,0,0,0.7),
@@ -119,33 +130,6 @@
       overflow: hidden;
     }
     .desktop.visible { display: flex; }
-    .starfield {
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-      z-index: -1;
-    }
-    .stars1, .stars2, .stars3 {
-      position: absolute;
-      top: 0; left: 0;
-      background: transparent;
-    }
-    .stars1, .stars1::after { width: 1px; height: 1px; }
-    .stars2, .stars2::after { width: 2px; height: 2px; }
-    .stars3, .stars3::after { width: 3px; height: 3px; }
-    .stars1::after, .stars2::after, .stars3::after {
-      content: '';
-      position: absolute;
-      top: 2000px;
-      background: transparent;
-    }
-    .stars1 { animation: animStar 50s linear infinite; }
-    .stars2 { animation: animStar 100s linear infinite; }
-    .stars3 { animation: animStar 150s linear infinite; }
-    @keyframes animStar {
-      from { transform: translateY(0); }
-      to { transform: translateY(-2000px); }
-    }
     .dock {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
@@ -241,7 +225,8 @@
     .terminal {
       background: var(--bg-panel);
       padding: 20px 24px 28px;
-      min-height: 500px;
+      height: calc(100vh - 130px);
+      overflow-y: auto;
     }
 
     /* ── Command groups ── */
@@ -584,16 +569,16 @@
     }
     .fake-cursor.visible { opacity: 1; }
     .fake-cursor svg { width: 100%; height: 100%; }
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+    .terminal::-webkit-scrollbar { width: 5px; }
+    .terminal::-webkit-scrollbar-track { background: var(--bg); }
+    .terminal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .terminal::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
     /* ── Mobile ── */
     @media (max-width: 640px) {
       body { font-size: 12px; }
       .menubar { display: none; }
-      .window { margin: 0; border-radius: 0; border-left: none; border-right: none; }
+      .window { margin: 0; border-radius: 0; border-left: none; border-right: none; max-height: 100vh; }
       .terminal { padding: 14px 14px 20px; }
       .name-display { font-size: 1.6rem; }
       .skills-grid { grid-template-columns: 1fr; }
@@ -630,12 +615,6 @@
   </style>
 </head>
 <body>
-
-<div class="starfield">
-  <div class="stars1" id="stars1"></div>
-  <div class="stars2" id="stars2"></div>
-  <div class="stars3" id="stars3"></div>
-</div>
 
 <div class="menubar" id="menubar">
   <span id="menuClock"></span>
@@ -904,7 +883,7 @@
 
 
 <!-- Mail Window -->
-<div class="window hidden" id="mailWindow" style="max-width:700px;width:90%;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);margin:0;">
+<div class="window hidden" id="mailWindow" style="max-width:700px;width:90%;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);margin:0;max-height:none;">
   <div class="titlebar">
     <div class="dots">
       <div class="dot dot-red" onclick="closeMail()">×</div>
@@ -914,7 +893,7 @@
     <div class="titlebar-label">New Message</div>
     <div class="titlebar-right"></div>
   </div>
-  <div class="terminal" style="min-height:auto;padding:16px 20px;">
+  <div class="terminal" style="min-height:auto;padding:16px 20px;height:auto;overflow:visible;">
     <div class="mail-fields">
       <div class="mail-row"><span class="mail-label">To:</span><span class="mail-value">acad.shail@gmail.com</span></div>
       <div class="mail-row"><span class="mail-label">From:</span><input type="email" id="mailFrom" class="mail-input" placeholder="your@email.com" /></div>
@@ -1030,7 +1009,7 @@ function openWindow() {
         g.classList.add('visible');
         g.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         if (i === groups.length - 1) {
-          setTimeout(function() { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 600);
+          setTimeout(function() { document.getElementById('terminal').scrollTo({ top: 0, behavior: 'smooth' }); }, 600);
         }
       }, delay);
     });
@@ -1393,23 +1372,6 @@ function escapeHtml(s) {
 document.getElementById('termInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') runCommand();
 });
-
-(function generateStars() {
-  function shadows(n) {
-    var s = [];
-    for (var i = 0; i < n; i++) s.push(Math.floor(Math.random()*2000)+'px '+Math.floor(Math.random()*2000)+'px #FFF');
-    return s.join(',');
-  }
-  var s1 = shadows(400), s2 = shadows(100), s3 = shadows(50);
-  document.getElementById('stars1').style.boxShadow = s1;
-  document.getElementById('stars1').style.cssText += 'box-shadow:'+s1;
-  document.getElementById('stars2').style.cssText += 'box-shadow:'+s2;
-  document.getElementById('stars3').style.cssText += 'box-shadow:'+s3;
-  // ::after shadows via stylesheet
-  var sheet = document.createElement('style');
-  sheet.textContent = '#stars1::after{box-shadow:'+s1+'}#stars2::after{box-shadow:'+s2+'}#stars3::after{box-shadow:'+s3+'}';
-  document.head.appendChild(sheet);
-})();
 
 (function tickClock() {
   var el = document.getElementById('menuClock');
