@@ -198,10 +198,11 @@ function animateToContact(startX, startY) {
 var wasMinimized = false;
 
 function animateToDesktopIcon(iconId, startX, startY) {
+  var href = document.getElementById(iconId).href;
+  if (window.innerWidth <= 640) { window.open(href, '_blank'); return; }
   var cursor = document.getElementById('fakeCursor');
   var yellowDot = document.querySelector('#window .dot-yellow');
   var r1 = yellowDot.getBoundingClientRect();
-  var href = document.getElementById(iconId).href;
   var newWin = window.open('', '_blank');
 
   cursor.style.transition = 'none';
