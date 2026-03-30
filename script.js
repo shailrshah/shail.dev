@@ -559,6 +559,9 @@ document.getElementById('termInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') runCommand();
   else if (e.key.length === 1) playKeystroke();
 });
+document.querySelectorAll('#mailFrom, #mailSubject, #mailBody').forEach(el => {
+  el.addEventListener('keydown', e => { if (e.key.length === 1) playKeystroke(); });
+});
 
 (function tickClock() {
   var el = document.getElementById('menuClock');
