@@ -809,3 +809,9 @@ function openBlogPost(file, title, date) {
     body.innerHTML = '<div class="error-line">Failed to load ' + escapeHtml(file) + '</div>';
   });
 }
+
+console.log(
+  '%c👋 Hey, curious one! %c\n\nYou found the secret dev console.\nNo frameworks. No build tools. Just HTML, CSS, and JS.\n\nLike what you see? → acad.shail@gmail.com\n',
+  'font-size:18px;font-weight:bold;color:#c792ea;',
+  'font-size:13px;color:#63d4f5;'
+);
