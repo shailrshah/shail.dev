@@ -773,7 +773,7 @@ function minimizeBlogFinder() {
   document.getElementById('blogDockDot').classList.add('active');
 }
 
-function showBlogList() {
+function showBlogList(pushState) {
   playClick();
   var finder = document.getElementById('blogFinder');
   document.getElementById('blogTitlebar').textContent = '~/blog';
@@ -789,9 +789,10 @@ function showBlogList() {
   }).join('');
   list.style.display = '';
   document.getElementById('blogPostView').style.display = 'none';
+  if (pushState !== false) history.pushState({ blog: true }, '', '/blog');
 }
 
-function openBlogPost(file, title, date) {
+function openBlogPost(file, title, date, pushState) {
   playClick();
   var finder = document.getElementById('blogFinder');
   finder.style.top = '2.5rem';
@@ -808,7 +809,24 @@ function openBlogPost(file, title, date) {
   }).catch(function() {
     body.innerHTML = '<div class="error-line">Failed to load ' + escapeHtml(file) + '</div>';
   });
+  if (pushState !== false) history.pushState({ blog: true, file: file, title: title, date: date }, '', '/blog/' + file.replace('.md', ''));
 }
+
+window.addEventListener('popstate', function(e) {
+  var s = e.state;
+  if (!s) return;
+  if (s.file) { openBlogFinder(); openBlogPost(s.file, s.title, s.date, false); }
+  else if (s.blog) { openBlogFinder(); showBlogList(false); }
+});
+
+(function() {
+  var slug = sessionStorage.getItem('openBlogPost');
+  if (!slug) return;
+  sessionStorage.removeItem('openBlogPost');
+  var post = blogPosts.find(function(p) { return p.file.replace('.md', '') === slug; });
+  if (!post) return;
+  setTimeout(function() { openBlogFinder(); openBlogPost(post.file, post.title, post.date, false); }, 100);
+})();
 
 console.log(
   '%c👋 Hey, curious one! %c\n\nYou found the secret dev console.\nNo frameworks. No build tools. Just HTML, CSS, and JS.\n\nLike what you see? → acad.shail@gmail.com\n',
