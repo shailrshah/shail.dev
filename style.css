@@ -722,9 +722,9 @@
     /* Toast */
     .toast {
       position: fixed;
-      top: 40px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%) translateY(-100px);
+      transform: translate(-50%, -50%) scale(0.9);
       background: rgba(19, 21, 31, 0.95);
       border: 1px solid var(--green);
       color: var(--green);
@@ -739,7 +739,7 @@
     }
     .toast.visible {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      transform: translate(-50%, -50%) scale(1);
     }
 
     @media print {
