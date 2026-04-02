@@ -34,7 +34,8 @@ The experience reinforced something I already believed: AI is most useful when y
 ## What I'd Do Differently
 
 - Be more deliberate about what you hand off to AI. It's fast, but every suggestion still needs review — and the cost of a bad one compounds quickly across a codebase you own.
-- Skip the paid SSL cert. GitHub Pages handles it for free.
+- Skip the paid SSL cert from NameCheap. GitHub Pages/Cloudflare Pages handles it for free.
+- Move to Cloudflare Pages from the start. Same GitHub-based deploy workflow, but with URL rewriting, better CDN, and the domain registration is at wholesale price — no markup on renewals.
 
 ## The Result
 
