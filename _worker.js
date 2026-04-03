@@ -4,14 +4,14 @@ export default {
     const path = url.pathname;
 
     // Serve static assets as-is
-    if (path.match(/\.(html|css|js|png|jpg|ico|webmanifest|pdf|md)$/)) {
+    if (path === '/' || path.match(/\.(html|css|js|png|jpg|jpeg|ico|webmanifest|pdf|md)$/)) {
       return env.ASSETS.fetch(request);
     }
 
-    // Rewrite known routes to index.html, preserving the URL
+    // Rewrite known routes to index.html
     if (path === '/resume' || path === '/contact' || path === '/blog' || path.startsWith('/blog/')) {
-      const indexUrl = new URL('/index.html', url.origin);
-      return env.ASSETS.fetch(new Request(indexUrl, request));
+      const indexRequest = new Request(new URL('/', url.origin), request);
+      return env.ASSETS.fetch(indexRequest);
     }
 
     return env.ASSETS.fetch(request);
