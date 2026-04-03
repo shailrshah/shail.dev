@@ -13,11 +13,11 @@ No frameworks. No build tools. Just HTML, CSS, and JavaScript.
 Deliberately minimal:
 
 - **HTML/CSS/JS** — vanilla, no dependencies except a Google Font and `marked.js` for markdown rendering
-- **GitHub Pages** — free hosting, deploys on every push to `master`, zero configuration
-- **Namecheap** — domain registration for `shail.dev`, with a CNAME record pointing to `shailrshah.github.io`
-- **SSL** — I bought a PositiveSSL certificate from Namecheap, though GitHub Pages would have provisioned one for free via Let's Encrypt. Learned that after the fact.
+- **Cloudflare Workers** — hosting with a built-in CDN, deploys on every push to `master`, preview URLs for every branch
+- **Namecheap** — domain registration for `shail.dev`
+- **SSL** — handled automatically by Cloudflare
 
-The DNS setup is straightforward: Namecheap resolves `shail.dev` to GitHub's servers, GitHub matches the `Host` header to the repo via the `CNAME` file, and serves the site. The URL never redirects — it stays `shail.dev` the whole time.
+The site is a single-page application, but every window has a real URL: `/resume`, `/contact`, `/blog`, `/blog/building-shail-dev`. Cloudflare's SPA routing serves `index.html` for all routes, and a small worker injects per-post OG tags so blog links preview correctly on WhatsApp, Slack, and iMessage. The JS reads `location.pathname` on load and opens the right window.
 
 ## The Hardest Part
 
@@ -34,8 +34,9 @@ The experience reinforced something I already believed: AI is most useful when y
 ## What I'd Do Differently
 
 - Be more deliberate about what you hand off to AI. It's fast, but every suggestion still needs review — and the cost of a bad one compounds quickly across a codebase you own.
-- Skip the paid SSL cert from NameCheap. GitHub Pages/Cloudflare Pages handles it for free.
-- Move to Cloudflare Pages from the start. Same GitHub-based deploy workflow, but with URL rewriting, better CDN, and the domain registration is at wholesale price — no markup on renewals.
+- Skip the paid SSL cert. Cloudflare handles it for free.
+- Start on Cloudflare Workers from day one instead of GitHub Pages. The SPA routing, CDN, preview branches, and wholesale domain pricing are all worth it — and the migration was more work than it needed to be.
+- Define the scope before starting. Features like blog deep links got built, reverted, and left unfinished because the decision of whether to support them wasn't made upfront. Knowing what "done" looks like saves a lot of back-and-forth.
 
 ## The Result
 
