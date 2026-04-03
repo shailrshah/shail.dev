@@ -362,13 +362,13 @@ const responses = {
   </div></div>`,
 
   'ping recruiter.io': () => `<div class="cmd-group"><div class="output">
-    <div style="color:var(--dim);margin-bottom:6px;">PING recruiter.io (acad.shail@gmail.com)</div>
+    <div style="color:var(--dim);margin-bottom:6px;">PING recruiter.io (hi@shail.dev)</div>
     <div style="line-height:2;font-size:12.5px;">
       <div>64 bytes from <span style="color:var(--cyan)">shail@gmail</span>: icmp_seq=1 ttl=64 time=<span style="color:var(--green)">~4h</span> <span style="color:var(--dim)"># avg response time</span></div>
       <div>64 bytes from <span style="color:var(--cyan)">linkedin/shailrshah</span>: icmp_seq=2 ttl=64 time=<span style="color:var(--green)">~1d</span></div>
       <div style="margin-top:8px;color:var(--yellow)">--- recruiter.io ping statistics ---</div>
       <div>2 packets transmitted, 2 received, <span style="color:var(--green)">0% packet loss</span></div>
-      <div style="margin-top:6px;color:var(--text)">→ <a href="mailto:acad.shail[at]gmail.com" data-email="acad.shail@gmail.com" onclick="this.href='mailto:'+this.dataset.email;return true;" style="color:var(--cyan);text-decoration:none;">acad.shail@gmail.com</a> &nbsp;|&nbsp; <a href="https://linkedin.com/in/shailrshah" target="_blank" style="color:var(--cyan);text-decoration:none;">linkedin.com/in/shailrshah</a></div>
+      <div style="margin-top:6px;color:var(--text)">→ <a href="mailto:hi@shail.dev" data-email="hi@shail.dev" onclick="this.href='mailto:'+this.dataset.email;return true;" style="color:var(--cyan);text-decoration:none;">hi@shail.dev</a> &nbsp;|&nbsp; <a href="https://linkedin.com/in/shailrshah" target="_blank" style="color:var(--cyan);text-decoration:none;">linkedin.com/in/shailrshah</a></div>
     </div>
   </div></div>`,
 
@@ -427,7 +427,7 @@ const responses = {
   './contact.sh': () => `<div class="cmd-group"><div class="output">
     <div style="color:var(--green);margin-bottom:8px;">#!/bin/bash — running contact.sh</div>
     <div style="display:grid;grid-template-columns:80px 1fr;gap:6px 12px;">
-      <span style="color:var(--purple)">email</span><span><a href="mailto:acad.shail[at]gmail.com" data-email="acad.shail@gmail.com" onclick="this.href='mailto:'+this.dataset.email;return true;" style="color:var(--cyan);text-decoration:none;">acad.shail@gmail.com</a></span>
+      <span style="color:var(--purple)">email</span><span><a href="mailto:hi@shail.dev" data-email="hi@shail.dev" onclick="this.href='mailto:'+this.dataset.email;return true;" style="color:var(--cyan);text-decoration:none;">hi@shail.dev</a></span>
       <span style="color:var(--purple)">linkedin</span><span><a href="https://linkedin.com/in/shailrshah" target="_blank" style="color:var(--cyan);text-decoration:none;">linkedin.com/in/shailrshah</a></span>
       <span style="color:var(--purple)">phone</span><span style="color:var(--text)">+1 (669) 224-8809</span>
       <span style="color:var(--purple)">location</span><span style="color:var(--text)">Sunnyvale, CA — open to hybrid / remote</span>
@@ -631,7 +631,7 @@ function runCommand() {
               <span>→ Validating enthusiasm</span><span style="color:var(--green)">[ high ]</span>
               <span>→ Confirming fit</span><span style="color:var(--green)">[ excellent ]</span>
             </div><br>
-            Next step: <a href="mailto:acad.shail[at]gmail.com" data-email="acad.shail@gmail.com" onclick="this.href='mailto:'+this.dataset.email;return true;" style="color:var(--cyan);text-decoration:none;">acad.shail@gmail.com</a>
+            Next step: <a href="mailto:hi@shail.dev" data-email="hi@shail.dev" onclick="this.href='mailto:'+this.dataset.email;return true;" style="color:var(--cyan);text-decoration:none;">hi@shail.dev</a>
           </div>
         </div>`;
         wrapper.innerHTML += step2;
@@ -827,7 +827,7 @@ function openBlogPost(file, title, date) {
 }
 
 console.log(
-  '%c👋 Hey, curious one! %c\n\nYou found the secret dev console.\nNo frameworks. No build tools. Just HTML, CSS, and JS.\n\nLike what you see? → acad.shail@gmail.com\n',
+  '%c👋 Hey, curious one! %c\n\nYou found the secret dev console.\nNo frameworks. No build tools. Just HTML, CSS, and JS.\n\nLike what you see? → hi@shail.dev\n',
   'font-size:18px;font-weight:bold;color:#c792ea;',
   'font-size:13px;color:#63d4f5;'
 );
