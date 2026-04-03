@@ -10,7 +10,7 @@ export default {
 
     // Rewrite known routes to index.html
     if (path === '/resume' || path === '/contact' || path === '/blog' || path.startsWith('/blog/')) {
-      const indexRequest = new Request(new URL('/', url.origin), request);
+      const indexRequest = new Request(new URL('/index.html', url.origin), request);
       return env.ASSETS.fetch(indexRequest);
     }
 
