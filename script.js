@@ -138,6 +138,7 @@ function closeMail() {
 }
 function minimizeMail() {
   playClick();
+  history.pushState({}, '', '/');
   document.getElementById('mailWindow').classList.add('hidden');
   document.getElementById('mailDockDot').classList.add('active');
 }
@@ -259,6 +260,7 @@ function closeWindow() {
 }
 function minimizeWindow() {
   playClick();
+  history.pushState({}, '', '/');
   wasMinimized = true;
   document.getElementById('window').classList.add('hidden');
   document.getElementById('desktop').classList.add('visible');
@@ -777,6 +779,7 @@ function closeBlogFinder() {
 
 function minimizeBlogFinder() {
   playClick();
+  history.pushState({}, '', '/');
   document.getElementById('blogFinder').classList.add('hidden');
   document.getElementById('blogDockDot').classList.add('active');
 }
