@@ -834,8 +834,8 @@ console.log(
 
 
 (function() {
-  var path = location.pathname;
-  var blogSlug = path.match(/^\/blog\/(.+)$/);
+  var path = location.pathname.replace(/\/$/, '') || '/';
+  var blogSlug = path.match(/^\/blog\/([^/]+)$/);
   var splash = document.getElementById('splash');
 
   function skipSplash() {
@@ -857,7 +857,7 @@ console.log(
 })();
 
 window.addEventListener('popstate', function() {
-  var path = location.pathname;
+  var path = location.pathname.replace(/\/$/, '') || '/';
   var blogSlug = path.match(/^\/blog\/(.+)$/);
   if (path === '/resume') { minimizeAll(); openWindow(); }
   else if (path === '/contact') { minimizeAll(); openMail(); }
