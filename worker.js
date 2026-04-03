@@ -16,6 +16,21 @@ function excerpt(md) {
   return text.length > 160 ? text.slice(0, 157) + '...' : text;
 }
 
+const SECURITY_HEADERS = {
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://static.cloudflareinsights.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; frame-ancestors 'none'",
+  'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'X-Frame-Options': 'DENY',
+};
+
+function withSecurityHeaders(response) {
+  const resp = new Response(response.body, response);
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) {
+    resp.headers.set(k, v);
+  }
+  return resp;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -33,7 +48,7 @@ export default {
       const post = blogPosts[blogSlug[1]];
       if (!post) {
         const notFound = await env.ASSETS.fetch(new Request(new URL('/404.html', url.origin), request));
-        return new Response(notFound.body, { status: 404, headers: notFound.headers });
+        return withSecurityHeaders(new Response(notFound.body, { status: 404, headers: notFound.headers }));
       }
 
       const [indexRes, mdRes] = await Promise.all([
@@ -45,22 +60,25 @@ export default {
       const description = md ? excerpt(md) : `Published ${post.date} · shail.dev`;
       const postUrl = `https://shail.dev/blog/${blogSlug[1]}`;
 
-      return new HTMLRewriter()
-        .on('title',                           { element: el => el.setInnerContent(title) })
-        .on('meta[property="og:title"]',       { element: el => el.setAttribute('content', title) })
-        .on('meta[property="og:description"]', { element: el => el.setAttribute('content', description) })
-        .on('meta[property="og:url"]',         { element: el => el.setAttribute('content', postUrl) })
-        .on('meta[name="description"]',        { element: el => el.setAttribute('content', description) })
-        .transform(indexRes);
+      return withSecurityHeaders(
+        new HTMLRewriter()
+          .on('title',                           { element: el => el.setInnerContent(title) })
+          .on('meta[property="og:title"]',       { element: el => el.setAttribute('content', title) })
+          .on('meta[property="og:description"]', { element: el => el.setAttribute('content', description) })
+          .on('meta[property="og:url"]',         { element: el => el.setAttribute('content', postUrl) })
+          .on('meta[name="description"]',        { element: el => el.setAttribute('content', description) })
+          .transform(indexRes)
+      );
     }
 
     // Known SPA routes
     if (knownRoutes.has(path)) {
-      return env.ASSETS.fetch(new Request(new URL('/index.html', url.origin), request));
+      const res = await env.ASSETS.fetch(new Request(new URL('/index.html', url.origin), request));
+      return withSecurityHeaders(res);
     }
 
     // Unknown route → 404
     const notFound = await env.ASSETS.fetch(new Request(new URL('/404.html', url.origin), request));
-    return new Response(notFound.body, { status: 404, headers: notFound.headers });
+    return withSecurityHeaders(new Response(notFound.body, { status: 404, headers: notFound.headers }));
   }
 };
