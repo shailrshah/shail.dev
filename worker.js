@@ -67,14 +67,21 @@ export default {
           .on('meta[property="og:description"]', { element: el => el.setAttribute('content', description) })
           .on('meta[property="og:url"]',         { element: el => el.setAttribute('content', postUrl) })
           .on('meta[name="description"]',        { element: el => el.setAttribute('content', description) })
+          .on('link[rel="canonical"]',           { element: el => el.setAttribute('href', postUrl) })
           .transform(indexRes)
       );
     }
 
-    // Known SPA routes
+    // Known SPA routes — rewrite canonical to match current path
     if (knownRoutes.has(path)) {
+      const canonical = `https://shail.dev${path === '/' ? '' : path}`;
       const res = await env.ASSETS.fetch(new Request(new URL('/index.html', url.origin), request));
-      return withSecurityHeaders(res);
+      return withSecurityHeaders(
+        new HTMLRewriter()
+          .on('link[rel="canonical"]', { element: el => el.setAttribute('href', canonical) })
+          .on('meta[property="og:url"]', { element: el => el.setAttribute('content', canonical) })
+          .transform(res)
+      );
     }
 
     // Unknown route → 404
