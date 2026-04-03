@@ -13,6 +13,45 @@ function playClick() {
   o.start(); o.stop(ctx.currentTime + 0.06);
 }
 
+function playOpen() {
+  var ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sine'; o.frequency.value = 400;
+  o.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.12);
+  g.gain.setValueAtTime(0.07, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(); o.stop(ctx.currentTime + 0.15);
+}
+
+function playClose() {
+  var ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sine'; o.frequency.value = 800;
+  o.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.12);
+  g.gain.setValueAtTime(0.07, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(); o.stop(ctx.currentTime + 0.15);
+}
+
+function playMinimize() {
+  var ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sine'; o.frequency.value = 700;
+  o.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.06);
+  g.gain.setValueAtTime(0.06, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(); o.stop(ctx.currentTime + 0.08);
+}
+
+function playNav() {
+  var ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'triangle'; o.frequency.value = 900 + Math.random() * 200;
+  g.gain.setValueAtTime(0.05, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(); o.stop(ctx.currentTime + 0.05);
+}
+
 function playKeystroke() {
   var ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
   o.type = 'square'; o.frequency.value = 800 + Math.random() * 400;
@@ -124,20 +163,20 @@ function dockMailClick() {
 
 function openMail() {
   minimizeAll();
-  playClick();
+  playOpen();
   history.pushState({}, '', '/contact');
   document.getElementById('mailWindow').classList.remove('hidden');
   document.getElementById('mailDockDot').classList.add('active');
   bringToFront(document.getElementById('mailWindow'));
 }
 function closeMail() {
-  playClick();
+  playClose();
   history.pushState({}, '', '/');
   document.getElementById('mailWindow').classList.add('hidden');
   document.getElementById('mailDockDot').classList.remove('active');
 }
 function minimizeMail() {
-  playClick();
+  playMinimize();
   history.pushState({}, '', '/');
   document.getElementById('mailWindow').classList.add('hidden');
   document.getElementById('mailDockDot').classList.add('active');
@@ -249,7 +288,7 @@ function animateToDesktopIcon(iconId, startX, startY) {
 }
 
 function closeWindow() {
-  playClick();
+  playClose();
   history.pushState({}, '', '/');
   wasMinimized = false;
   document.getElementById('window').classList.add('hidden');
@@ -259,7 +298,7 @@ function closeWindow() {
   setIconsHidden(false);
 }
 function minimizeWindow() {
-  playClick();
+  playMinimize();
   history.pushState({}, '', '/');
   wasMinimized = true;
   document.getElementById('window').classList.add('hidden');
@@ -269,7 +308,7 @@ function minimizeWindow() {
   setIconsHidden(false);
 }
 function openWindow() {
-  playClick();
+  playOpen();
   history.pushState({}, '', '/resume');
   document.getElementById('desktop').classList.remove('visible');
   document.getElementById('window').classList.remove('hidden');
@@ -765,7 +804,6 @@ function autoOpen() {
           cursor.classList.remove('visible');
           icon.style.transform = '';
           icon.style.color = '';
-          playClick();
           openWindow();
         }, 300);
       });
@@ -797,7 +835,7 @@ function dockBlogClick() {
 
 function openBlogFinder() {
   minimizeAll();
-  playClick();
+  playOpen();
   history.pushState({}, '', '/blog');
   showBlogList();
   document.getElementById('blogFinder').classList.remove('hidden');
@@ -806,21 +844,21 @@ function openBlogFinder() {
 }
 
 function closeBlogFinder() {
-  playClick();
+  playClose();
   history.pushState({}, '', '/');
   document.getElementById('blogFinder').classList.add('hidden');
   document.getElementById('blogDockDot').classList.remove('active');
 }
 
 function minimizeBlogFinder() {
-  playClick();
+  playMinimize();
   history.pushState({}, '', '/');
   document.getElementById('blogFinder').classList.add('hidden');
   document.getElementById('blogDockDot').classList.add('active');
 }
 
 function showBlogList() {
-  playClick();
+  playNav();
   history.pushState({}, '', '/blog');
   var finder = document.getElementById('blogFinder');
   document.getElementById('blogTitlebar').textContent = '~/blog';
@@ -839,7 +877,7 @@ function showBlogList() {
 }
 
 function openBlogPost(file, title, date) {
-  playClick();
+  playNav();
   history.pushState({}, '', '/blog/' + file.replace('.md', ''));
   var finder = document.getElementById('blogFinder');
   finder.style.top = '2.5rem';
