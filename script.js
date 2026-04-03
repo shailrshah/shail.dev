@@ -705,14 +705,37 @@ function dismissSplash() {
 
 function lockScreen() {
   playClick();
+  var prelock = {
+    resume: !document.getElementById('window').classList.contains('hidden'),
+    mail: !document.getElementById('mailWindow').classList.contains('hidden'),
+    blog: !document.getElementById('blogFinder').classList.contains('hidden'),
+  };
   minimizeAll();
   history.pushState({}, '', '/');
   var splash = document.createElement('div');
   splash.className = 'splash';
   splash.id = 'splash';
-  splash.innerHTML = '<div class="splash-content"><div class="splash-host">shail.dev</div><div class="splash-avatar">👤</div><div class="splash-name">Guest</div><button class="splash-btn" onclick="dismissSplash()">Log In</button><div class="splash-footer">The terminal is the resume.<br>Built with vanilla HTML, CSS, and JS. No frameworks were harmed.</div></div>';
+  splash.innerHTML = '<div class="splash-content"><div class="splash-host">shail.dev</div><div class="splash-avatar">👤</div><div class="splash-name">Guest</div><button class="splash-btn" onclick="unlockScreen()">Log In</button><div class="splash-footer">The terminal is the resume.<br>Built with vanilla HTML, CSS, and JS. No frameworks were harmed.</div></div>';
   document.body.appendChild(splash);
   splashDismissed = false;
+  window._prelockState = prelock;
+}
+
+function unlockScreen() {
+  playChime();
+  var splash = document.getElementById('splash');
+  splash.classList.add('hidden');
+  splashDismissed = true;
+  setTimeout(function() {
+    splash.remove();
+    var s = window._prelockState;
+    if (s) {
+      if (s.resume) openWindow();
+      if (s.mail) openMail();
+      if (s.blog) openBlogFinder();
+      window._prelockState = null;
+    }
+  }, 500);
 }
 
 function autoOpen() {
