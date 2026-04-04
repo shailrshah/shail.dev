@@ -624,7 +624,7 @@
       cursor: pointer;
       user-select: none;
     }
-    .music-ring { width: 80px; height: 80px; cursor: pointer; }
+    .music-ring { width: 80px; height: 80px; cursor: pointer; position: relative; z-index: 1; }
     .music-play {
       position: absolute;
       top: 40px;
