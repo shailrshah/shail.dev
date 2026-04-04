@@ -130,7 +130,16 @@ function animateCursorAlongCurve(cursor, points, duration, cb) {
 }
 
 function setIconsHidden(hidden) {
-  document.querySelector('.desktop-icons-fixed').classList.toggle('app-open', hidden);
+  var container = document.querySelector('.desktop-icons-fixed');
+  container.classList.toggle('app-open', hidden);
+  container.querySelectorAll('a, [tabindex]').forEach(function(el) {
+    el.setAttribute('tabindex', hidden ? '-1' : '0');
+  });
+  document.querySelectorAll('.dock .desktop-icon').forEach(function(el) {
+    el.setAttribute('tabindex', hidden ? '-1' : '0');
+  });
+  var lock = document.getElementById('menuLock');
+  if (lock) lock.setAttribute('tabindex', hidden ? '-1' : '0');
 }
 
 function isMailOpen() {
@@ -168,18 +177,22 @@ function openMail() {
   document.getElementById('mailWindow').classList.remove('hidden');
   document.getElementById('mailDockDot').classList.add('active');
   bringToFront(document.getElementById('mailWindow'));
+  setIconsHidden(true);
+  document.getElementById('mailFrom').focus();
 }
 function closeMail() {
   playClose();
   history.pushState({}, '', '/');
   document.getElementById('mailWindow').classList.add('hidden');
   document.getElementById('mailDockDot').classList.remove('active');
+  setIconsHidden(false);
 }
 function minimizeMail() {
   playMinimize();
   history.pushState({}, '', '/');
   document.getElementById('mailWindow').classList.add('hidden');
   document.getElementById('mailDockDot').classList.add('active');
+  setIconsHidden(false);
 }
 function sendMail() {
   var from = document.getElementById('mailFrom');
@@ -315,8 +328,8 @@ function openWindow() {
   document.getElementById('dock').classList.add('hidden');
   setIconsHidden(true);
   bringToFront(document.getElementById('window'));
-  if (!wasMinimized) {
-    var groups = document.querySelectorAll('.cmd-group[id^="cmd-"]');
+  document.getElementById('window').focus();
+  if (!wasMinimized) {    var groups = document.querySelectorAll('.cmd-group[id^="cmd-"]');
     groups.forEach(function(g) { g.classList.remove('visible'); });
     var delay = 0;
     groups.forEach(function(g, i) {
@@ -709,8 +722,8 @@ termInput.addEventListener('input', function() {
 
 termInput.addEventListener('keydown', e => {
   if (e.key === 'Tab') {
-    e.preventDefault();
     if (ghostText.textContent) {
+      e.preventDefault();
       e.target.value = ghostText.textContent;
       ghostText.textContent = '';
     }
@@ -822,6 +835,11 @@ function lockScreen() {
   splash.id = 'splash';
   splash.innerHTML = '<div class="splash-content"><div class="splash-host">shail.dev</div><div class="splash-avatar">👤</div><div class="splash-name">Guest</div><button class="splash-btn" onclick="unlockScreen()">Log In</button><div class="splash-footer">The terminal is the resume.<br>Built with vanilla HTML, CSS, and JS. No frameworks were harmed.</div></div>';
   document.body.appendChild(splash);
+  var loginBtn = splash.querySelector('.splash-btn');
+  loginBtn.focus();
+  splash.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') { e.preventDefault(); loginBtn.focus(); }
+  });
   splashDismissed = false;
   window._prelockState = prelock;
 }
@@ -912,6 +930,8 @@ function openBlogFinder() {
   document.getElementById('blogFinder').classList.remove('hidden');
   document.getElementById('blogDockDot').classList.add('active');
   bringToFront(document.getElementById('blogFinder'));
+  setIconsHidden(true);
+  document.getElementById('blogFinder').focus();
 }
 
 function closeBlogFinder() {
@@ -919,6 +939,7 @@ function closeBlogFinder() {
   history.pushState({}, '', '/');
   document.getElementById('blogFinder').classList.add('hidden');
   document.getElementById('blogDockDot').classList.remove('active');
+  setIconsHidden(false);
 }
 
 function minimizeBlogFinder() {
@@ -926,6 +947,7 @@ function minimizeBlogFinder() {
   history.pushState({}, '', '/');
   document.getElementById('blogFinder').classList.add('hidden');
   document.getElementById('blogDockDot').classList.add('active');
+  setIconsHidden(false);
 }
 
 function showBlogList() {
@@ -938,7 +960,7 @@ function showBlogList() {
   finder.style.maxHeight = '80vh';
   var list = document.getElementById('blogFileList');
   list.innerHTML = blogPosts.map(function(p) {
-    return '<div class="blog-file" onclick="openBlogPost(\'' + p.file + '\',\'' + escapeHtml(p.title) + '\',\'' + p.date + '\')">' +
+    return '<div class="blog-file" tabindex="0" role="button" onclick="openBlogPost(\'' + p.file + '\',\'' + escapeHtml(p.title) + '\',\'' + p.date + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openBlogPost(\'' + p.file + '\',\'' + escapeHtml(p.title) + '\',\'' + p.date + '\');}">' +
       '<span class="blog-file-icon">📄</span>' +
       '<span class="blog-file-name">' + escapeHtml(p.title) + '</span>' +
       '<span class="blog-file-date">' + p.date + '</span></div>';
@@ -1013,3 +1035,13 @@ window.addEventListener('popstate', function() {
     minimizeAll();
   }
 });
+
+(function() {
+  var splash = document.getElementById('splash');
+  if (!splash) return;
+  var btn = splash.querySelector('.splash-btn');
+  if (btn) btn.focus();
+  splash.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') { e.preventDefault(); btn.focus(); }
+  });
+})();
