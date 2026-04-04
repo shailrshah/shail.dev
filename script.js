@@ -736,14 +736,80 @@ var splashDismissed = false;
 function dismissSplash() {
   if (splashDismissed) return;
   splashDismissed = true;
+  var a = ensureAudio();
+  a.play().then(function() {
+    setMusicBtn(true);
+    updateProgress();
+  }).catch(function() {});
   playChime();
   var splash = document.getElementById('splash');
   splash.classList.add('hidden');
   setTimeout(function() { splash.remove(); autoOpen(); localStorage.setItem('visited','1'); }, 500);
 }
 
+var ambientAudio = null;
+var progressAnim = null;
+
+function ensureAudio() {
+  if (!ambientAudio) {
+    ambientAudio = new Audio('assets/music.mp3');
+    ambientAudio.loop = true;
+    ambientAudio.volume = 0.3;
+  }
+  return ambientAudio;
+}
+
+function updateProgress() {
+  var a = ambientAudio;
+  if (!a || a.paused) return;
+  var ring = document.getElementById('musicProgress');
+  if (ring && a.duration) {
+    var pct = a.currentTime / a.duration;
+    ring.setAttribute('stroke-dashoffset', 283 - pct * 283);
+  }
+  progressAnim = requestAnimationFrame(updateProgress);
+}
+
+function setMusicBtn(playing) {
+  var btn = document.getElementById('musicBtn');
+  btn.textContent = playing ? '⏸' : '▶';
+  btn.classList.toggle('playing', playing);
+}
+
+function seekMusic(e) {
+  e.stopPropagation();
+  var a = ensureAudio();
+  if (!a.duration) return;
+  var svg = e.currentTarget;
+  var rect = svg.getBoundingClientRect();
+  var x = e.clientX - rect.left - rect.width / 2;
+  var y = e.clientY - rect.top - rect.height / 2;
+  var angle = Math.atan2(y, x) + Math.PI / 2;
+  if (angle < 0) angle += 2 * Math.PI;
+  a.currentTime = (angle / (2 * Math.PI)) * a.duration;
+}
+
+function toggleMusic() {
+  var a = ensureAudio();
+  var btn = document.getElementById('musicBtn');
+  if (a.paused) {
+    a.play();
+    setMusicBtn(true);
+    updateProgress();
+  } else {
+    a.pause();
+    setMusicBtn(false);
+    cancelAnimationFrame(progressAnim);
+  }
+}
+
 function lockScreen() {
   playClick();
+  if (ambientAudio && !ambientAudio.paused) {
+    ambientAudio.pause();
+    setMusicBtn(false);
+    cancelAnimationFrame(progressAnim);
+  }
   var prelock = {
     resume: !document.getElementById('window').classList.contains('hidden'),
     mail: !document.getElementById('mailWindow').classList.contains('hidden'),
@@ -761,6 +827,11 @@ function lockScreen() {
 }
 
 function unlockScreen() {
+  var a = ensureAudio();
+  a.play().then(function() {
+    setMusicBtn(true);
+    updateProgress();
+  }).catch(function() {});
   playChime();
   var splash = document.getElementById('splash');
   splash.classList.add('hidden');

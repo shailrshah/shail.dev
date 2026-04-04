@@ -170,12 +170,18 @@
       top: 40px;
       right: 40px;
       z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      grid-template-columns: auto auto;
       gap: 20px;
+      align-items: start;
+      justify-items: center;
     }
+    .desktop-icons-fixed { user-select: none; }
     .desktop-icons-fixed a { text-decoration: none; color: inherit; }
+    .music-widget { grid-column: 1; grid-row: 1 / 4; align-self: start; }
+    .desktop-icons-fixed > a:nth-of-type(1) { grid-column: 2; grid-row: 1; }
+    .desktop-icons-fixed > a:nth-of-type(2) { grid-column: 2; grid-row: 2; }
+    .desktop-icons-fixed > a:nth-of-type(3) { grid-column: 2; grid-row: 3; }
     @media (max-width: 1170px) {
       .desktop-icons-fixed.app-open { display: none; }
     }
@@ -609,6 +615,43 @@
       align-items: center;
     }
     #menuLock:hover { opacity: 1; }
+    .music-widget {
+      position: relative;
+      width: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .music-ring { width: 80px; height: 80px; cursor: pointer; }
+    .music-play {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      line-height: 1;
+      color: var(--text);
+      pointer-events: auto;
+      border-radius: 50%;
+    }
+    .music-title {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+      font-family: var(--font);
+    }
+    .menubar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
     /* Animated cursor */
     .fake-cursor {
@@ -637,12 +680,29 @@
         right: auto;
         bottom: auto;
         transform: none;
+        display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 24px;
         width: calc(100% - 40px);
         justify-content: flex-start;
       }
+      .music-widget, .desktop-icons-fixed > a:nth-of-type(1),
+      .desktop-icons-fixed > a:nth-of-type(2), .desktop-icons-fixed > a:nth-of-type(3) {
+        grid-column: auto; grid-row: auto;
+      }
+      .music-widget {
+        width: 100%;
+        order: 4;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        position: relative;
+      }
+      .desktop-icons-fixed > a { order: 0; }
+      .music-widget .music-ring { width: 60px; height: 60px; }
+      .music-widget .music-play { left: 30px; top: 30px; }
+      .music-widget .music-title { width: 60px; text-align: center; }
       .window { margin: 0; border-radius: 0; border-left: none; border-right: none; max-height: 100vh; }
       #window .titlebar { padding-top: max(44px, env(safe-area-inset-top, 44px)); }
       .terminal { padding: 14px 14px 20px; }
